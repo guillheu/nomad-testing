@@ -303,7 +303,7 @@ job "example" {
       # are specific to each driver, so please see specific driver
       # documentation for more information.
       config {
-        image = "redis:7"
+        image = "redis:7.0.5-alpine3.16"
         ports = ["db"]
 
         # The "auth_soft_fail" configuration instructs Nomad to try public
