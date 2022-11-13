@@ -2,8 +2,8 @@ job "python-http-server" {
   datacenters = ["dc1"]
 
   group "http" {
-    mode: "host"
     network {
+      mode: "host",
       port "http" {
         to = 8080
       }
