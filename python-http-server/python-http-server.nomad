@@ -15,6 +15,7 @@ job "python-http-server" {
         image          = "python:alpine"
         ports          = ["http"]
         args = [        # having the python container start an http server, serving files at local/www/ on port 8080
+          "python3",
           "-m",
           "http.server",
           "8080",
