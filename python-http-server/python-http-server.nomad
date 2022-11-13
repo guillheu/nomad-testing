@@ -2,6 +2,7 @@ job "python-http-server" {
   datacenters = ["dc1"]
 
   group "http" {
+    mode: "host"
     network {
       port "http" {
         to = 8080
@@ -20,7 +21,9 @@ job "python-http-server" {
           "http.server",
           "8080",
           "--dir",
-          "local/www/"
+          "local/www/",
+          "--bind",
+          "0.0.0.0"
         ]
         auth_soft_fail = true
       }
