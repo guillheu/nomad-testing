@@ -6,6 +6,7 @@ job "python-http-server" {
       mode = "host"
       port "http" {
         to = 8080
+        static = 80
       }
     }
 
