@@ -3,7 +3,7 @@ job "python-http-server" {
 
   group "http" {
     network {
-      mode: "host",
+      mode = "host",
       port "http" {
         to = 8080
       }
