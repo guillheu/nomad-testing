@@ -357,8 +357,8 @@ job "example" {
       #     https://www.nomadproject.io/docs/job-specification/resources
       #
       resources {
-        cpu    = 500 # 500 MHz
-        memory = 256 # 256MB
+        cpu    = 100 # 100 MHz
+        memory = 100 # 100MB
       }
 
 
