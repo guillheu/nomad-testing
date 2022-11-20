@@ -1,11 +1,16 @@
-# This compose file will create 4 ubuntu containers with SSH enable from the ubuntu:latest image
-# and put them all in a bridged network (called "mesh") with CIDR 10.0.100.0/24
-# The network configuration will be as follows :
-# - nomad server master : 10.0.100.254
-# - nomad client (worker) 1 : 10.0.100.101
-# - nomad client (worker) 2 : 10.0.100.102
-# - nomad client (worker) 3 : 10.0.100.103
-# SSH-enabled container lets us set them up using Ansible without booting up a bunch of VMs.
+# This compose file will create 12 ubuntu containers with SSH enable from the ubuntu:latest image.
+# It will organise them in 2 networks : dc1 (10.1.100.0/24) and dc2 (10.2.100.0/24)
+# The network configuration for DCX will be as follows :
+# - nomad/consul server master       : 10.X.100.1
+# - nomad/consul server follower 1   : 10.X.100.2
+# - nomad/consul server follower 2   : 10.X.100.3
+# - nomad/consul client 1            : 10.X.100.101
+# - nomad/consul client 2            : 10.X.100.102
+# - nomad/consul client 3            : 10.X.100.103
+# - gateway for all the containers   : 10.X.100.254
+# with X=1 for DC1 and X=2 for DC2
+
+# SSH-enabled container lets us set them up using Ansible without booting up a bunch of heavy VMs.
 
 # DO NOT USE FOR PRODUCTION, TESTING PURPOSES ONLY
 # there are major security concerns with this, one of them being that Docker in Docker (DinD), which is necessary to start our docker-driven nomad jobs inside this cluster, 
@@ -14,57 +19,162 @@
 version: "3.9"
 services:
 
-  nomad_server_master:
+    ###################################
+    ############### DC1 ###############
+    ###################################
+
+  dc1_master:
     image: ubuntu-ssh
     build: 
       context: .
       dockerfile: ./ubuntu-ssh.dockerfile
     networks:
-      mesh:
-        ipv4_address: 10.0.100.254
+      dc1:
+        ipv4_address: 10.1.100.1
         aliases:
-          - master
+          - dc1_master
 
-  nomad_client_1:
+  dc1_follower_1:
     image: ubuntu-ssh
     build: 
       context: .
       dockerfile: ./ubuntu-ssh.dockerfile
     networks:
-      mesh:
-        ipv4_address: 10.0.100.101
+      dc1:
+        ipv4_address: 10.1.100.2
         aliases:
-          - client_1
+          - dc1_follower_1
 
-  nomad_client_2:
+  dc1_follower_2:
     image: ubuntu-ssh
     build: 
       context: .
       dockerfile: ./ubuntu-ssh.dockerfile
     networks:
-      mesh:
-        ipv4_address: 10.0.100.102
+      dc1:
+        ipv4_address: 10.1.100.3
         aliases:
-          - client_2
+          - dc1_follower_2
 
-  nomad_client_3:
+  dc1_client_1:
     image: ubuntu-ssh
     build: 
       context: .
       dockerfile: ./ubuntu-ssh.dockerfile
     networks:
-      mesh:
-        ipv4_address: 10.0.100.103
+      dc1:
+        ipv4_address: 10.1.100.101
         aliases:
-          - client_3
+          - dc1_client_1
+
+  dc1_client_2:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc1:
+        ipv4_address: 10.1.100.102
+        aliases:
+          - dc1_client_2
+
+  dc1_client_3:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc1:
+        ipv4_address: 10.1.100.103
+        aliases:
+          - dc1_client_3
+
+    #########################################
+    ################# DC2 ###################
+    #########################################
+
+  dc2_master:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.1
+        aliases:
+          - dc2_master
+
+  dc2_follower_1:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.2
+        aliases:
+          - dc2_follower_1
+
+  dc2_follower_2:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.3
+        aliases:
+          - dc2_follower_2
+
+  dc2_client_1:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.101
+        aliases:
+          - dc2_client_1
+
+  dc2_client_2:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.102
+        aliases:
+          - dc2_client_2
+
+  dc2_client_3:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      dc2:
+        ipv4_address: 10.2.100.103
+        aliases:
+          - dc2_client_3
 
 
+
+### Networks
 
 networks:
-  mesh:
+  dc1:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 10.0.100.0/24
-          gateway: 10.0.100.1
+        - subnet: 10.1.100.0/24
+          gateway: 10.1.100.254
+  dc2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.2.100.0/24
+          gateway: 10.2.100.254

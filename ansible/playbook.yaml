@@ -1,5 +1,5 @@
 - name: Installing Consul and Nomad
-  hosts: test_containers
+  hosts: all
   tasks:
   - name: Installing gpg
     apt:

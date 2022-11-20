@@ -5,5 +5,5 @@ Finally, use the job declarations in the [`nomad` directory](/nomad/) to deploy 
 The cluster is not persistent and all the data will be lost upon shutting down the containers. This is for testing and development purposes only.
 
 ```shell
-export NOMAD_ADDR=http://10.0.100.254:4646
+export NOMAD_ADDR=http://10.0.100.1:4646
 ```
