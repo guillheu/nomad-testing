@@ -1,0 +1,17 @@
+- name: Configuring Consul servers on DC1
+  hosts: dc1:&servers
+  tasks:
+  - name: Create consul config folder
+    file:
+      path: /etc/consul.d/server/
+      state: directory
+  - name: Create config files from template
+    template:
+      dest: /etc/consul.d/server/config.hcl
+      src: ../templates/server_config.j2
+  - name: Grab server configs
+    command: cat /etc/consul.d/server/config.hcl
+    register: command_output
+  - name: Print server configs
+    debug:
+      msg: "{{command_output.stdout}}"

@@ -1,42 +1,75 @@
-all:
-  children:
-    dc1:
-      children:
-        servers:
-          hosts: 
-            dc1_master:
-              ansible_host: 10.1.100.1
-            dc1_follower_1:
-              ansible_host: 10.1.100.2
-            dc1_follower_2:
-              ansible_host: 10.1.100.3
-        clients:
-          hosts:
-            dc1_client_1:
-              ansible_host: 10.1.100.101
-            dc1_client_2:
-              ansible_host: 10.1.100.102
-            dc1_client_3:
-              ansible_host: 10.1.100.103
-    dc2:
-      children:
-        servers:
-          hosts: 
-            dc2_master:
-              ansible_host: 10.2.100.1
-            dc2_follower_1:
-              ansible_host: 10.2.100.2
-            dc2_follower_2:
-              ansible_host: 10.2.100.3
-        clients:
-          hosts:
-            dc2_client_1:
-              ansible_host: 10.2.100.101
-            dc2_client_2:
-              ansible_host: 10.2.100.102
-            dc2_client_3:
-              ansible_host: 10.2.100.103
+# Data Center groups
 
+dc1:
+  hosts: 
+    dc1_master:
+      ansible_host: 10.1.100.1
+    dc1_follower_1:
+      ansible_host: 10.1.100.2
+    dc1_follower_2:
+      ansible_host: 10.1.100.3
+    
+    dc1_client_1:
+      ansible_host: 10.1.100.101
+    dc1_client_2:
+      ansible_host: 10.1.100.102
+    dc1_client_3:
+      ansible_host: 10.1.100.103
   vars:
     ansible_user: root
-    # ansible_password: password  # Defined in ubuntu-ssh.dockerfile
+
+dc2:
+  hosts: 
+    dc2_master:
+      ansible_host: 10.2.100.1
+    dc2_follower_1:
+      ansible_host: 10.2.100.2
+    dc2_follower_2:
+      ansible_host: 10.2.100.3
+      
+    dc2_client_1:
+      ansible_host: 10.2.100.101
+    dc2_client_2:
+      ansible_host: 10.2.100.102
+    dc2_client_3:
+      ansible_host: 10.2.100.103
+  vars:
+    ansible_user: root
+
+
+
+# Servers & client groups
+
+
+servers:
+  hosts:
+    dc1_master:
+      ansible_host: 10.1.100.1
+    dc1_follower_1:
+      ansible_host: 10.1.100.2
+    dc1_follower_2:
+      ansible_host: 10.1.100.3
+
+    dc2_master:
+      ansible_host: 10.2.100.1
+    dc2_follower_1:
+      ansible_host: 10.2.100.2
+    dc2_follower_2:
+      ansible_host: 10.2.100.3
+
+
+clients:
+  hosts:
+    dc1_client_1:
+      ansible_host: 10.1.100.101
+    dc1_client_2:
+      ansible_host: 10.1.100.102
+    dc1_client_3:
+      ansible_host: 10.1.100.103
+
+    dc2_client_1:
+      ansible_host: 10.2.100.101
+    dc2_client_2:
+      ansible_host: 10.2.100.102
+    dc2_client_3:
+      ansible_host: 10.2.100.103
