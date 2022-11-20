@@ -1,5 +1,3 @@
 ```shell
-export NOMAD_ADDR=http://192.168.122.99:4646
+export NOMAD_ADDR=http://10.0.100.254:4646
 ```
-
-TODO : Consul
