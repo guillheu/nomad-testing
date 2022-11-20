@@ -2,3 +2,12 @@ test_vms:
   hosts:
     servertest:
       ansible_host: 192.168.122.99
+      ansible_become_password: "toto"
+      ubuntu_version: focal
+test_containers:
+  hosts: 
+    ubuntu:
+      ansible_host: 172.17.0.2
+      ansible_user: root
+      ansible_password: password
+      ubuntu_version: jammy
