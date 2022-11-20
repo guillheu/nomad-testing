@@ -1,0 +1,70 @@
+# This compose file will create 4 ubuntu containers with SSH enable from the ubuntu:latest image
+# and put them all in a bridged network (called "mesh") with CIDR 10.0.100.0/24
+# The network configuration will be as follows :
+# - nomad server master : 10.0.100.254
+# - nomad client (worker) 1 : 10.0.100.101
+# - nomad client (worker) 2 : 10.0.100.102
+# - nomad client (worker) 3 : 10.0.100.103
+# SSH-enabled container lets us set them up using Ansible without booting up a bunch of VMs.
+
+# DO NOT USE FOR PRODUCTION, TESTING PURPOSES ONLY
+# there are major security concerns with this, one of them being that Docker in Docker (DinD), which is necessary to start our docker-driven nomad jobs inside this cluster, 
+# can lead to processes leaking out of their container environment and into the host.
+
+version: "3.9"
+services:
+
+  nomad_server_master:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      mesh:
+        ipv4_address: 10.0.100.254
+        aliases:
+          - master
+
+  nomad_client_1:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      mesh:
+        ipv4_address: 10.0.100.101
+        aliases:
+          - client_1
+
+  nomad_client_2:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      mesh:
+        ipv4_address: 10.0.100.102
+        aliases:
+          - client_2
+
+  nomad_client_3:
+    image: ubuntu-ssh
+    build: 
+      context: .
+      dockerfile: ./ubuntu-ssh.dockerfile
+    networks:
+      mesh:
+        ipv4_address: 10.0.100.103
+        aliases:
+          - client_3
+
+
+
+networks:
+  mesh:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.100.0/24
+          gateway: 10.0.100.1
