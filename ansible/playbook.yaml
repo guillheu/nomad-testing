@@ -30,3 +30,9 @@
       state: present
       update_cache: yes
     become: yes
+  - name: Installing Consul
+    apt:
+      name: consul
+      state: present
+      update_cache: yes
+    become: yes
