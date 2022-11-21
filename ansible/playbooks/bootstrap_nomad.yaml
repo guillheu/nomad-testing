@@ -1,0 +1,3 @@
+- import_playbook: nomad/install.yaml
+- import_playbook: nomad/configure.yaml
+- import_playbook: nomad/run.yaml

@@ -1,0 +1,46 @@
+- name: Configuring Nomad server nodes on all DCs
+  hosts: servers
+  vars:
+    primary_datacenter: dc1
+    cluster_datacenters:
+      - dc1
+      - dc2
+  tasks:
+  - name: Create nomad config folder
+    file:
+      path: /etc/nomad.d/server/
+      state: directory
+  - name: Create server config files from template
+    template:
+      dest: /etc/nomad.d/server/config.hcl
+      src: ./server_config.hcl.j2
+  - name: Grab server configs
+    command: cat /etc/nomad.d/server/config.hcl
+    register: command_output
+  - name: Print server configs
+    debug:
+      msg: "{{command_output.stdout_lines}}"
+
+
+- name: Configuring Nomad client nodes on all DCs
+  hosts: clients
+  vars:
+    primary_datacenter: dc1
+    cluster_datacenters:
+      - dc1
+      - dc2
+  tasks:
+  - name: Create nomad config folder
+    file:
+      path: /etc/nomad.d/client/
+      state: directory
+  - name: Create client config files from template
+    template:
+      dest: /etc/nomad.d/client/config.hcl
+      src: ./client_config.hcl.j2
+  - name: Grab client configs
+    command: cat /etc/nomad.d/client/config.hcl
+    register: command_output
+  - name: Print client configs
+    debug:
+      msg: "{{command_output.stdout_lines}}"

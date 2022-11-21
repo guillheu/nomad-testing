@@ -1,0 +1,22 @@
+{% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
+# /etc/nomad.d/client/config.hcl
+
+datacenter = "{{current_dc}}"
+
+# data_dir tends to be environment specific.
+data_dir = "/opt/nomad/data"
+
+client {
+  enabled = true
+}
+
+
+# https://developer.hashicorp.com/nomad/docs/configuration/consul
+consul {
+  address             = "127.0.0.1:8500"
+  server_service_name = "nomad-server"
+  client_service_name = "nomad-client"
+  auto_advertise      = true
+  server_auto_join    = true
+  client_auto_join    = true
+}
