@@ -1,4 +1,4 @@
-- name: Installing Consul on all nodes
+- name: Installing Nomad on all nodes
   hosts: all
   tasks:
   - name: Installing gpg

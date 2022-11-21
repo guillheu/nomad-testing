@@ -1,4 +1,4 @@
-- name: Installing Nomad on all nodes
+- name: Installing Consul on all nodes
   hosts: all
   tasks:
   - name: Installing gpg
@@ -29,12 +29,6 @@
           creates: /etc/apt/sources.list.d/hashicorp.list
 
     become: yes
-  # - name: Installing Nomad
-  #   apt:
-  #     name: nomad
-  #     state: present
-  #     update_cache: yes
-  #   become: yes
   - name: Installing Consul
     apt:
       name: consul
