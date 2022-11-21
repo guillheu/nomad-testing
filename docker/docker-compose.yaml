@@ -23,7 +23,8 @@ services:
     ############### DC1 ###############
     ###################################
 
-  dc1_master:
+  dc1_server_1:
+    hostname: dc1_server_1
     image: ubuntu-ssh
     build: 
       context: .
@@ -35,6 +36,7 @@ services:
           - dc1_server_1
 
   dc1_server_2:
+    hostname: dc1_server_2
     image: ubuntu-ssh
     build: 
       context: .
@@ -46,6 +48,7 @@ services:
           - dc1_server_2
 
   dc1_server_3:
+    hostname: dc1_server_3
     image: ubuntu-ssh
     build: 
       context: .
@@ -57,6 +60,7 @@ services:
           - dc1_server_3
 
   dc1_client_1:
+    hostname: dc1_client_1
     image: ubuntu-ssh
     build: 
       context: .
@@ -68,6 +72,7 @@ services:
           - dc1_client_1
 
   dc1_client_2:
+    hostname: dc1_client_2
     image: ubuntu-ssh
     build: 
       context: .
@@ -79,6 +84,7 @@ services:
           - dc1_client_2
 
   dc1_client_3:
+    hostname: dc1_client_3
     image: ubuntu-ssh
     build: 
       context: .
@@ -94,6 +100,7 @@ services:
     #########################################
 
   dc2_server_1:
+    hostname: dc2_server_1
     image: ubuntu-ssh
     build: 
       context: .
@@ -105,6 +112,7 @@ services:
           - dc2_server_1
 
   dc2_server_2:
+    hostname: dc2_server_2
     image: ubuntu-ssh
     build: 
       context: .
@@ -116,6 +124,7 @@ services:
           - dc2_server_2
 
   dc2_server_3:
+    hostname: dc2_server_3
     image: ubuntu-ssh
     build: 
       context: .
@@ -127,6 +136,7 @@ services:
           - dc2_server_3
 
   dc2_client_1:
+    hostname: dc2_client_1
     image: ubuntu-ssh
     build: 
       context: .
@@ -138,6 +148,7 @@ services:
           - dc2_client_1
 
   dc2_client_2:
+    hostname: dc2_client_2
     image: ubuntu-ssh
     build: 
       context: .
@@ -149,6 +160,7 @@ services:
           - dc2_client_2
 
   dc2_client_3:
+    hostname: dc2_client_3
     image: ubuntu-ssh
     build: 
       context: .
