@@ -1,0 +1,3 @@
+- import_playbook: consul/install.yaml
+- import_playbook: consul/configure.yaml
+- import_playbook: consul/run.yaml
