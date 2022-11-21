@@ -1,0 +1,5 @@
+- name: Starting Consul server agents
+  hosts: dc1:&servers
+  tasks:
+  - name: Starting consul server agent
+    shell: "consul agent --config-file /etc/consul.d/server/config.hcl"
