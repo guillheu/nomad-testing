@@ -1,0 +1,17 @@
+{% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
+
+server     = false
+datacenter = "{{ current_dc }}"
+data_dir   = "consul/data"
+log_level  = "INFO"
+retry_join = [
+{% for host in (groups['servers'] | intersect(groups[current_dc]))  %}
+"{{ hostvars[host].ansible_host }}",
+{% endfor %}
+]
+
+retry_join_wan = [
+{% for host in (groups['servers'] | difference(groups[current_dc]))  %}
+"{{ hostvars[host].ansible_host }}",
+{% endfor %}
+]

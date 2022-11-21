@@ -1,5 +1,5 @@
-- name: Configuring Consul nodes on all DCs
-  hosts: all
+- name: Configuring Consul server nodes on all DCs
+  hosts: servers
   vars:
     primary_datacenter: dc1
     cluster_datacenters:
@@ -10,13 +10,37 @@
     file:
       path: /etc/consul.d/server/
       state: directory
-  - name: Create config files from template
+  - name: Create server config files from template
     template:
       dest: /etc/consul.d/server/config.hcl
-      src: ./server_config.j2
+      src: ./server_config.hcl.j2
   - name: Grab server configs
     command: cat /etc/consul.d/server/config.hcl
     register: command_output
   - name: Print server configs
+    debug:
+      msg: "{{command_output.stdout_lines}}"
+
+
+- name: Configuring Consul client nodes on all DCs
+  hosts: clients
+  vars:
+    primary_datacenter: dc1
+    cluster_datacenters:
+      - dc1
+      - dc2
+  tasks:
+  - name: Create consul config folder
+    file:
+      path: /etc/consul.d/client/
+      state: directory
+  - name: Create client config files from template
+    template:
+      dest: /etc/consul.d/client/config.hcl
+      src: ./client_config.hcl.j2
+  - name: Grab client configs
+    command: cat /etc/consul.d/client/config.hcl
+    register: command_output
+  - name: Print client configs
     debug:
       msg: "{{command_output.stdout_lines}}"

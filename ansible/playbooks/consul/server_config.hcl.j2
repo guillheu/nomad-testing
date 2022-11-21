@@ -11,16 +11,14 @@ server    = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 # Tells the Consul agent how many servers to expect in the current data center.
 # Only for server nodes.
 # is equals to the number of hosts that are in both the "servers" and "dc1" or "dc2" group of the current host.
-{% if 'servers' in group_names %}
 bootstrap_expect = {{ groups['servers'] | intersect(groups[current_dc]) | count }}
-{% endif %}
 
 ui_config {
 # Whether to enable the web UI on port 8500
 # True if current host belongs to "servers" group
-    enabled = {% if 'servers' in group_names %}true{% else %}false{% endif %}
-
+    enabled = true
 }
+
 # Name of the datacenter.
 # "dc1" or "dc2" based on which group the current host belongs to.
 datacenter = "{{ current_dc }}"
