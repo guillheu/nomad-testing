@@ -2,4 +2,4 @@
   hosts: servers
   tasks:
   - name: Starting consul server agent
-    shell: "consul agent --config-file /etc/consul.d/server/config.hcl"
+    shell: "screen -dmS Consul_agent consul agent --config-file /etc/consul.d/server/config.hcl"
