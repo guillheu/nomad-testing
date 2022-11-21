@@ -1,3 +1,5 @@
+{% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
+
 # This file is meant to be used with ansible and processed by the template module.
 # It will create a config file for a Consul instance based on the host's groups and variables.
 
@@ -7,8 +9,11 @@ server    = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 
 
 # Tells the Consul agent how many servers to expect in the current data center.
+# Only for server nodes.
 # is equals to the number of hosts that are in both the "servers" and "dc1" or "dc2" group of the current host.
-bootstrap_expect = {{ groups['servers'] | intersect(groups[group_names[0]]) | count }}
+{% if 'servers' in group_names %}
+bootstrap_expect = {{ groups['servers'] | intersect(groups[current_dc]) | count }}
+{% endif %}
 
 ui_config {
 # Whether to enable the web UI on port 8500
@@ -18,7 +23,7 @@ ui_config {
 }
 # Name of the datacenter.
 # "dc1" or "dc2" based on which group the current host belongs to.
-datacenter = "{{ group_names[0] }}"
+datacenter = "{{ current_dc }}"
 data_dir   = "consul/data"
 log_level  = "INFO"
 addresses {
@@ -30,7 +35,7 @@ connect {
 # Array containing the IP addresses of all the other Consul nodes to attempt to connect to.
 # Contains the IP addresses of all the other Consul servers in the current host's datacenter
 retry_join = [
-{% for host in (groups['servers'] | intersect(groups[group_names[0]]) | reject('search', inventory_hostname) | list)  %}
+{% for host in (groups['servers'] | intersect(groups[current_dc]) | reject('search', inventory_hostname) | list)  %}
 "{{ hostvars[host].ansible_host }}",
 {% endfor %}
 ]
@@ -38,9 +43,9 @@ retry_join = [
 # Array containing the IP addresses of all Consul server nodes in other datacenters
 # Contains the IP addresses of all the Consul servers in other datacenters
 retry_join_wan = [
-{% for host in (groups['servers'] | difference(groups[group_names[0]]))  %}
+{% for host in (groups['servers'] | difference(groups[current_dc]))  %}
 "{{ hostvars[host].ansible_host }}",
 {% endfor %}
 ]
 
-primary_datacenter = "dc1"
+primary_datacenter = "{{ primary_datacenter }}"

@@ -1,5 +1,5 @@
-- name: Starting Consul server agents
-  hosts: servers
+- name: Starting all Consul agents
+  hosts: all
   tasks:
   - name: Starting consul server agent
     shell: "screen -dmS Consul_agent consul agent --config-file /etc/consul.d/server/config.hcl"
