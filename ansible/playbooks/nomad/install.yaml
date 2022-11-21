@@ -1,4 +1,4 @@
-- name: Installing Consul and Nomad on all nodes
+- name: Installing Consul on all nodes
   hosts: all
   tasks:
   - name: Installing gpg
@@ -7,11 +7,15 @@
       state: present
       update_cache: yes
     become: yes
+  - name: Installing iproute2 for the ip command for the nomad clients
+    apt:
+      name: iproute2
+      state: present
+    become: yes
   - name: Installing screen
     apt:
       name: screen
       state: present
-      update_cache: yes
     become: yes
   - name: Installing wget
     apt:
@@ -36,9 +40,3 @@
       state: present
       update_cache: yes
     become: yes
-  # - name: Installing Consul
-  #   apt:
-  #     name: consul
-  #     state: present
-  #     update_cache: yes
-  #   become: yes

@@ -1,0 +1,2 @@
+- import_playbook: bootstrap_consul.yaml
+- import_playbook: bootstrap_nomad.yaml
