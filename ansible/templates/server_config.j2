@@ -1,13 +1,23 @@
+# This file is meant to be used with ansible and processed by the template module.
+# It will create a config file for a Consul instance based on the host's groups and variables.
+
+# Whether the current host is a Consul server or client.
+# Current host is a server if it belongs to the "servers" group.
 server    = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 
 
-
+# Tells the Consul agent how many servers to expect in the current data center.
+# is equals to the number of hosts that are in both the "servers" and "dc1" or "dc2" group of the current host.
 bootstrap_expect = {{ groups['servers'] | intersect(groups[group_names[0]]) | count }}
 
 ui_config {
+# Whether to enable the web UI on port 8500
+# True if current host belongs to "servers" group
     enabled = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 
 }
+# Name of the datacenter.
+# "dc1" or "dc2" based on which group the current host belongs to.
 datacenter = "{{ group_names[0] }}"
 data_dir   = "consul/data"
 log_level  = "INFO"
@@ -17,6 +27,8 @@ addresses {
 connect {
     enabled = true
 }
+# Array containing the IP addresses of all the other Consul nodes to attempt to connect to.
+# Contains the IP addresses of all the other Consul servers in the current host's datacenter
 retry_join = [
 {% for host in (groups['servers'] | intersect(groups[group_names[0]]) | reject('search', inventory_hostname) | list)  %}
 "{{ hostvars[host].ansible_host }}",
