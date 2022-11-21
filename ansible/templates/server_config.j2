@@ -5,7 +5,7 @@ server    = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 bootstrap_expect = {{ groups['servers'] | intersect(groups[group_names[0]]) | count }}
 
 ui_config {
-    enabled = {% if inventory_hostname == "dc1_master" %}true{% else %}false{% endif %}
+    enabled = {% if 'servers' in group_names %}true{% else %}false{% endif %}
 
 }
 datacenter = "{{ group_names[0] }}"

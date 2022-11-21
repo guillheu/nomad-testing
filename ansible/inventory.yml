@@ -2,11 +2,11 @@
 
 dc1:
   hosts: 
-    dc1_master:
+    dc1_server_1:
       ansible_host: 10.1.100.1
-    dc1_follower_1:
+    dc1_server_2:
       ansible_host: 10.1.100.2
-    dc1_follower_2:
+    dc1_server_3:
       ansible_host: 10.1.100.3
     
     dc1_client_1:
@@ -20,11 +20,11 @@ dc1:
 
 dc2:
   hosts: 
-    dc2_master:
+    dc2_server_1:
       ansible_host: 10.2.100.1
-    dc2_follower_1:
+    dc2_server_2:
       ansible_host: 10.2.100.2
-    dc2_follower_2:
+    dc2_server_3:
       ansible_host: 10.2.100.3
       
     dc2_client_1:
@@ -43,18 +43,18 @@ dc2:
 
 servers:
   hosts:
-    dc1_master:
+    dc1_server_1:
       ansible_host: 10.1.100.1
-    dc1_follower_1:
+    dc1_server_2:
       ansible_host: 10.1.100.2
-    dc1_follower_2:
+    dc1_server_3:
       ansible_host: 10.1.100.3
 
-    dc2_master:
+    dc2_server_1:
       ansible_host: 10.2.100.1
-    dc2_follower_1:
+    dc2_server_2:
       ansible_host: 10.2.100.2
-    dc2_follower_2:
+    dc2_server_3:
       ansible_host: 10.2.100.3
 
 

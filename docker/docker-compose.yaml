@@ -1,9 +1,9 @@
 # This compose file will create 12 ubuntu containers with SSH enable from the ubuntu:latest image.
 # It will organise them in 2 networks : dc1 (10.1.100.0/24) and dc2 (10.2.100.0/24)
 # The network configuration for DCX will be as follows :
-# - nomad/consul server master       : 10.X.100.1
-# - nomad/consul server follower 1   : 10.X.100.2
-# - nomad/consul server follower 2   : 10.X.100.3
+# - nomad/consul server 1            : 10.X.100.1
+# - nomad/consul server 2            : 10.X.100.2
+# - nomad/consul server 3            : 10.X.100.3
 # - nomad/consul client 1            : 10.X.100.101
 # - nomad/consul client 2            : 10.X.100.102
 # - nomad/consul client 3            : 10.X.100.103
@@ -32,9 +32,9 @@ services:
       dc1:
         ipv4_address: 10.1.100.1
         aliases:
-          - dc1_master
+          - dc1_server_1
 
-  dc1_follower_1:
+  dc1_server_2:
     image: ubuntu-ssh
     build: 
       context: .
@@ -43,9 +43,9 @@ services:
       dc1:
         ipv4_address: 10.1.100.2
         aliases:
-          - dc1_follower_1
+          - dc1_server_2
 
-  dc1_follower_2:
+  dc1_server_3:
     image: ubuntu-ssh
     build: 
       context: .
@@ -54,7 +54,7 @@ services:
       dc1:
         ipv4_address: 10.1.100.3
         aliases:
-          - dc1_follower_2
+          - dc1_server_3
 
   dc1_client_1:
     image: ubuntu-ssh
@@ -93,7 +93,7 @@ services:
     ################# DC2 ###################
     #########################################
 
-  dc2_master:
+  dc2_server_1:
     image: ubuntu-ssh
     build: 
       context: .
@@ -104,7 +104,7 @@ services:
         aliases:
           - dc2_master
 
-  dc2_follower_1:
+  dc2_server_2:
     image: ubuntu-ssh
     build: 
       context: .
@@ -113,9 +113,9 @@ services:
       dc2:
         ipv4_address: 10.2.100.2
         aliases:
-          - dc2_follower_1
+          - dc2_server_2
 
-  dc2_follower_2:
+  dc2_server_3:
     image: ubuntu-ssh
     build: 
       context: .
@@ -124,7 +124,7 @@ services:
       dc2:
         ipv4_address: 10.2.100.3
         aliases:
-          - dc2_follower_2
+          - dc2_server_3
 
   dc2_client_1:
     image: ubuntu-ssh
