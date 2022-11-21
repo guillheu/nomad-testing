@@ -1,5 +1,5 @@
-- name: Configuring Consul servers on DC1
-  hosts: dc1:&servers
+- name: Configuring Consul servers on all DCs
+  hosts: servers
   tasks:
   - name: Create consul config folder
     file:
