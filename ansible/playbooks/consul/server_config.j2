@@ -22,7 +22,7 @@ datacenter = "{{ group_names[0] }}"
 data_dir   = "consul/data"
 log_level  = "INFO"
 addresses {
-    http = "{{ ansible_host }}"
+    http = "0.0.0.0"
 }
 connect {
     enabled = true
@@ -34,3 +34,13 @@ retry_join = [
 "{{ hostvars[host].ansible_host }}",
 {% endfor %}
 ]
+
+# Array containing the IP addresses of all Consul server nodes in other datacenters
+# Contains the IP addresses of all the Consul servers in other datacenters
+retry_join_wan = [
+{% for host in (groups['servers'] | difference(groups[group_names[0]]))  %}
+"{{ hostvars[host].ansible_host }}",
+{% endfor %}
+]
+
+primary_datacenter = "dc1"
