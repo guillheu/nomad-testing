@@ -1,0 +1,47 @@
+- name: Installing Docker engine on client nodes
+  hosts: clients
+  tasks:
+  - name: Installing gpg
+    apt:
+      name: gpg
+      state: present
+      update_cache: yes
+    become: yes
+  - name: Installing ca-certificates
+    apt:
+      name: ca-certificates
+      state: present
+    become: yes
+  - name: Installing lsb-release
+    apt:
+      name: lsb-release
+      state: present
+    become: yes
+  - name: Installing wget
+    apt:
+      name: wget
+      state: present
+    become: yes
+  - name: Adding Docker apt repo
+    block:
+      - name: Downloading Docker apt repo key
+        shell: "wget -O- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | tee /usr/share/keyrings/docker.gpg"
+        args:
+          creates: /usr/share/keyrings/docker.gpg
+      - name: Adding Docker apt repo
+        shell: "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list"
+        args:
+          creates: /etc/apt/sources.list.d/docker.list
+    become: yes
+  - name: Installing Docker engine
+    apt:
+      name: docker-ce
+      state: present
+      update_cache: yes
+    become: yes
+  - name: Installing containerd.io
+    apt:
+      name: containerd.io
+      state: present
+      update_cache: yes
+    become: yes
