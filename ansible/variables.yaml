@@ -1,0 +1,8 @@
+datacenters:
+  - dc1
+  - dc2
+  - dc3
+regions:
+  - east
+  - west
+primary_datacenter: dc1

@@ -1,4 +1,4 @@
-{% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
+{% set current_dc = (datacenters | intersect(group_names))[0] %}
 
 server     = false
 datacenter = "{{ current_dc }}"

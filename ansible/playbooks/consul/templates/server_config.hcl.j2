@@ -1,4 +1,4 @@
-{% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
+{% set current_dc = (datacenters | intersect(group_names))[0] %}
 
 # This file is meant to be used with ansible and processed by the template module.
 # It will create a config file for a Consul instance based on the host's groups and variables.
