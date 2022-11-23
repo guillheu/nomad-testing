@@ -10,6 +10,7 @@ client {
   enabled = true
 }
 
+region = "{{ (group_names | intersect(regions))[0] }}"
 
 # https://developer.hashicorp.com/nomad/docs/configuration/consul
 consul {

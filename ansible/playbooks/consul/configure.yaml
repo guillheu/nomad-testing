@@ -5,6 +5,7 @@
     cluster_datacenters:
       - dc1
       - dc2
+      - dc3
   tasks:
   - name: Create consul config folder
     file:
@@ -29,6 +30,7 @@
     cluster_datacenters:
       - dc1
       - dc2
+      - dc3
   tasks:
   - name: Create consul config folder
     file:

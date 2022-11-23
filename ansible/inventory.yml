@@ -1,74 +1,63 @@
 all:
   vars:
     ansible_user: root
-#     primary_datacenter: dc1
-#     cluster_datacenters:
-#       - dc1
-#       - dc2
-#   hosts:
-#     dc1_server_1:
-#       ansible_host: 10.33.1.1
-#     dc1_server_2:
-#       ansible_host: 10.33.1.2
-#     dc1_server_3:
-#       ansible_host: 10.33.1.3
 
-#     dc2_server_1:
-#       ansible_host: 10.33.2.1
-#     dc2_server_2:
-#       ansible_host: 10.33.2.2
-#     dc2_server_3:
-#       ansible_host: 10.33.2.3
-
-#     dc1_client_1:
-#       ansible_host: 10.33.1.101
-#     dc1_client_2:
-#       ansible_host: 10.33.1.102
-#     dc1_client_3:
-#       ansible_host: 10.33.1.103
-
-#     dc2_client_1:
-#       ansible_host: 10.33.2.101
-#     dc2_client_2:
-#       ansible_host: 10.33.2.102
-#     dc2_client_3:
-#       ansible_host: 10.33.2.103
 
 
 # Data Center groups
+east:
+  children:
+    dc1:
+      hosts: 
+        dc1_server_1:
+          ansible_host: 10.33.1.1
+        dc1_server_2:
+          ansible_host: 10.33.1.2
+        dc1_server_3:
+          ansible_host: 10.33.1.3
+        
+        dc1_client_1:
+          ansible_host: 10.33.1.101
+        dc1_client_2:
+          ansible_host: 10.33.1.102
+        dc1_client_3:
+          ansible_host: 10.33.1.103
 
-dc1:
-  hosts: 
-    dc1_server_1:
-      ansible_host: 10.33.1.1
-    dc1_server_2:
-      ansible_host: 10.33.1.2
-    dc1_server_3:
-      ansible_host: 10.33.1.3
-    
-    dc1_client_1:
-      ansible_host: 10.33.1.101
-    dc1_client_2:
-      ansible_host: 10.33.1.102
-    dc1_client_3:
-      ansible_host: 10.33.1.103
+
+    dc2:
+      hosts: 
+        dc2_server_1:
+          ansible_host: 10.33.2.1
+        dc2_server_2:
+          ansible_host: 10.33.2.2
+        dc2_server_3:
+          ansible_host: 10.33.2.3
+          
+        dc2_client_1:
+          ansible_host: 10.33.2.101
+        dc2_client_2:
+          ansible_host: 10.33.2.102
+        dc2_client_3:
+          ansible_host: 10.33.2.103
 
 
-dc2:
-  hosts: 
-    dc2_server_1:
-      ansible_host: 10.33.2.1
-    dc2_server_2:
-      ansible_host: 10.33.2.2
-    dc2_server_3:
-      ansible_host: 10.33.2.3
-      
-    dc2_client_1:
-      ansible_host: 10.33.2.101
-    dc2_client_2:
-      ansible_host: 10.33.2.102
-    dc2_client_3:
-      ansible_host: 10.33.2.103
+west:
+  children:
+    dc3:
+      hosts: 
+        dc3_server_1:
+          ansible_host: 10.33.3.1
+        dc3_server_2:
+          ansible_host: 10.33.3.2
+        dc3_server_3:
+          ansible_host: 10.33.3.3
+          
+        dc3_client_1:
+          ansible_host: 10.33.3.101
+        dc3_client_2:
+          ansible_host: 10.33.3.102
+        dc3_client_3:
+          ansible_host: 10.33.3.103
 
 
 
@@ -78,32 +67,29 @@ dc2:
 servers:
   hosts:
     dc1_server_1:
-      ansible_host: 10.33.1.1
     dc1_server_2:
-      ansible_host: 10.33.1.2
     dc1_server_3:
-      ansible_host: 10.33.1.3
 
     dc2_server_1:
-      ansible_host: 10.33.2.1
     dc2_server_2:
-      ansible_host: 10.33.2.2
     dc2_server_3:
-      ansible_host: 10.33.2.3
+
+    dc3_server_1:
+    dc3_server_2:
+    dc3_server_3:
+      
 
 
 clients:
   hosts:
     dc1_client_1:
-      ansible_host: 10.33.1.101
     dc1_client_2:
-      ansible_host: 10.33.1.102
     dc1_client_3:
-      ansible_host: 10.33.1.103
 
     dc2_client_1:
-      ansible_host: 10.33.2.101
     dc2_client_2:
-      ansible_host: 10.33.2.102
     dc2_client_3:
-      ansible_host: 10.33.2.103
+
+    dc3_client_1:
+    dc3_client_2:
+    dc3_client_3:

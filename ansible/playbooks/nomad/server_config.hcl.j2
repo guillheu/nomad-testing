@@ -1,6 +1,8 @@
 {% set current_dc = (cluster_datacenters | intersect(group_names))[0] %}
 # /etc/nomad.d/server/config.hcl
 
+datacenter = "{{current_dc}}"
+
 # data_dir tends to be environment specific.
 data_dir = "/opt/nomad/data"
 
@@ -9,6 +11,7 @@ server {
   bootstrap_expect = {{ groups['servers'] | intersect(groups[current_dc]) | count }}
 }
 
+region = "{{ (group_names | intersect(regions))[0] }}"
 
 # https://developer.hashicorp.com/nomad/docs/configuration/consul
 consul {

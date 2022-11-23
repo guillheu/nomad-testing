@@ -5,6 +5,10 @@
     cluster_datacenters:
       - dc1
       - dc2
+      - dc3
+    regions:
+      - east
+      - west
   tasks:
   - name: Create nomad config folder
     file:
@@ -29,6 +33,10 @@
     cluster_datacenters:
       - dc1
       - dc2
+      - dc3
+    regions:
+      - east
+      - west
   tasks:
   - name: Create nomad config folder
     file:

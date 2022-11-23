@@ -7,3 +7,5 @@ The cluster is not persistent and all the data will be lost upon shutting down t
 ```shell
 export NOMAD_ADDR=http://10.33.1.1:4646
 ```
+
+![Infrastructure diagram](/infrastructure.png)
