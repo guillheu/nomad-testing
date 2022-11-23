@@ -19,6 +19,8 @@ ui_config {
     enabled = true
 }
 
+bind_addr = "{{ ansible_host }}"
+
 # Name of the datacenter.
 # "dc1" or "dc2" based on which group the current host belongs to.
 datacenter = "{{ current_dc }}"

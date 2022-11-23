@@ -22,6 +22,11 @@
       name: wget
       state: present
     become: yes
+  - name: Installing lsb-release
+    apt:
+      name: lsb-release
+      state: present
+    become: yes
   - name: Adding Hashicorp apt repo
     block:
       - name: Downloading Hashicorp apt repo key

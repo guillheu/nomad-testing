@@ -26,7 +26,7 @@ services:
 
   dc1_server_1:
     hostname: dc1_server_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -47,7 +47,7 @@ services:
 
   dc1_server_2:
     hostname: dc1_server_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -68,7 +68,7 @@ services:
 
   dc1_server_3:
     hostname: dc1_server_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -89,7 +89,7 @@ services:
 
   dc1_client_1:
     hostname: dc1_client_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -110,7 +110,7 @@ services:
 
   dc1_client_2:
     hostname: dc1_client_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -131,7 +131,7 @@ services:
 
   dc1_client_3:
     hostname: dc1_client_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -156,7 +156,7 @@ services:
 
   dc2_server_1:
     hostname: dc2_server_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -177,7 +177,7 @@ services:
 
   dc2_server_2:
     hostname: dc2_server_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -198,7 +198,7 @@ services:
 
   dc2_server_3:
     hostname: dc2_server_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -219,7 +219,7 @@ services:
 
   dc2_client_1:
     hostname: dc2_client_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -240,7 +240,7 @@ services:
 
   dc2_client_2:
     hostname: dc2_client_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -261,7 +261,7 @@ services:
 
   dc2_client_3:
     hostname: dc2_client_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -286,7 +286,7 @@ services:
 
   dc3_server_1:
     hostname: dc3_server_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -307,7 +307,7 @@ services:
 
   dc3_server_2:
     hostname: dc3_server_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -328,7 +328,7 @@ services:
 
   dc3_server_3:
     hostname: dc3_server_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -349,7 +349,7 @@ services:
 
   dc3_client_1:
     hostname: dc3_client_1
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -370,7 +370,7 @@ services:
 
   dc3_client_2:
     hostname: dc3_client_2
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .
@@ -391,7 +391,7 @@ services:
 
   dc3_client_3:
     hostname: dc3_client_3
-    privileged: true
+    runtime: sysbox-runc
     image: ubuntu-ssh
     build: 
       context: .

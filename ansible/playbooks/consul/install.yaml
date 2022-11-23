@@ -12,6 +12,11 @@
       name: screen
       state: present
     become: yes
+  - name: Installing lsb-release
+    apt:
+      name: lsb-release
+      state: present
+    become: yes
   - name: Installing wget
     apt:
       name: wget
