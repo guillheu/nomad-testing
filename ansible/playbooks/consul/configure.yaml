@@ -7,10 +7,22 @@
     file:
       path: /etc/consul.d/server/
       state: directory
+  - name: Create consul policies folder
+    file:
+      path: /etc/consul.d/server/policies/
+      state: directory
   - name: Create server config files from template
     template:
       dest: /etc/consul.d/server/config.hcl
-      src: templates/server_config.hcl.j2
+      src: templates/configs/server_config.hcl.j2
+  - name: Create server acl config file from template
+    template:
+      dest: /etc/consul.d/server/acl.hcl
+      src: templates/configs/server_acl.hcl.j2
+  - name: Creating policy files for dc1 servers
+    template:
+      dest: /etc/consul.d/server/policies/{{inventory_hostname}}_policy.hcl
+      src: templates/policies/server_policy.hcl.j2
   # - name: Grab server configs
   #   command: cat /etc/consul.d/server/config.hcl
   #   register: command_output
@@ -36,18 +48,12 @@
   - name: Create client config files from template
     template:
       dest: /etc/consul.d/client/config.hcl
-      src: templates/client_config.hcl.j2
-  # - name: Grab client configs
-  #   command: cat /etc/consul.d/client/config.hcl
-  #   register: command_output
-  # - name: Print client configs
-  #   debug:
-  #     msg: "{{command_output.stdout_lines}}"
+      src: templates/configs/client_config.hcl.j2
 
 
 - name: Create Consul service on all hosts
   hosts: clients:servers
-  tasks:  
+  tasks:
   - name: Create Consul systemd service
     template:
       dest: /etc/systemd/system/consul.service

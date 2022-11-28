@@ -19,11 +19,3 @@ retry_join_wan = [
 "{{ hostvars[host].ansible_host }}",
 {% endfor %}
 ]
-
-{% if primary_datacenter in group_names %}
-acl = {
-  enabled = true
-  default_policy = "deny"
-  enable_token_persistence = true
-}
-{% endif %}

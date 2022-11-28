@@ -9,8 +9,8 @@
 #   - name: Starting consul client agents
 #     shell: "screen -dmS Consul_agent consul agent -config-file /etc/consul.d/client/config.hcl"
 
-- name: Starting Consul agents on all hosts
-  hosts: servers:clients
+- name: Starting Consul agents on dc1 servers
+  hosts: servers:&dc1
   tasks:
   - name: Enabling and starting Consul service
     ansible.builtin.systemd:
@@ -27,3 +27,24 @@
   - name: Display Consul DC SecretID
     debug:
       msg: "{{(bootstrap_json.stdout | from_json)['SecretID']}}"
+  - name: Creating local file with bootstrap SecretID
+    local_action: copy content="{{(bootstrap_json.stdout | from_json)['SecretID']}}" dest="./bootstrap_secret_id"
+- name: Configuring ACLs for all dc1 servers
+  hosts: servers:&dc1
+  vars:
+    bootstrap_secret_id: "{{ lookup('file', './bootstrap_secret_id').splitlines()[0] }}"
+  tasks:
+  - name: Creating dc1 server policy
+    command: "consul acl policy create -token {{bootstrap_secret_id}} -name {{inventory_hostname}}_policy -datacenter dc1 -description \"Agent policy for {{inventory_hostname}}\" -rules @/etc/consul.d/server/policies/{{inventory_hostname}}_policy.hcl"
+  - name: Creating dc1 server token
+    command: "consul acl token create -token {{bootstrap_secret_id}} -description \"Agent token for {{inventory_hostname}}\" -policy-name {{inventory_hostname}}_policy -format=json"
+    register: server_token_json
+  - name: Creating ACL server config files
+    template:
+      dest: /etc/consul.d/server/acl.hcl
+      src: templates/configs/server_acl.hcl.j2
+  - name: Restarting the Consul service
+    ansible.builtin.systemd:
+      name: consul
+      masked: no
+      state: restarted

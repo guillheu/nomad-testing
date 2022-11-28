@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=root
-ExecStart=/usr/bin/env consul agent -config-file /etc/consul.d/{% if 'servers' in group_names %}server{% else %}client{% endif %}/config.hcl
+ExecStart=/usr/bin/env consul agent -config-dir /etc/consul.d/{% if 'servers' in group_names %}server{% else %}client{% endif %}/
 
 [Install]
 WantedBy=multi-user.target
