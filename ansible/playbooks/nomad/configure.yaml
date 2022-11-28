@@ -11,12 +11,12 @@
     template:
       dest: /etc/nomad.d/server/config.hcl
       src: templates/server_config.hcl.j2
-  - name: Grab server configs
-    command: cat /etc/nomad.d/server/config.hcl
-    register: command_output
-  - name: Print server configs
-    debug:
-      msg: "{{command_output.stdout_lines}}"
+  # - name: Grab server configs
+  #   command: cat /etc/nomad.d/server/config.hcl
+  #   register: command_output
+  # - name: Print server configs
+  #   debug:
+  #     msg: "{{command_output.stdout_lines}}"
 
 
 - name: Configuring Nomad client nodes on all DCs
@@ -32,9 +32,18 @@
     template:
       dest: /etc/nomad.d/client/config.hcl
       src: templates/client_config.hcl.j2
-  - name: Grab client configs
-    command: cat /etc/nomad.d/client/config.hcl
-    register: command_output
-  - name: Print client configs
-    debug:
-      msg: "{{command_output.stdout_lines}}"
+  # - name: Grab client configs
+  #   command: cat /etc/nomad.d/client/config.hcl
+  #   register: command_output
+  # - name: Print client configs
+  #   debug:
+  #     msg: "{{command_output.stdout_lines}}"
+
+
+- name: Create Nomad service on all hosts
+  hosts: clients:servers
+  tasks:  
+  - name: Create Nomad systemd service
+    template:
+      dest: /etc/systemd/system/nomad.service
+      src: templates/nomad.service.j2

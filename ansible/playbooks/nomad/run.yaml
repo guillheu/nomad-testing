@@ -1,10 +1,22 @@
-- name: Starting all Nomad server agents
-  hosts: servers
+# - name: Starting all Nomad server agents
+#   hosts: servers
+#   tasks:
+#   - name: Starting nomad server agents
+#     shell: "screen -dmS Nomad_agent nomad agent -config=/etc/nomad.d/server/config.hcl"
+# - name: Starting all Nomad client agents
+#   hosts: clients
+#   tasks:
+#   - name: Starting nomad client agents
+#     shell: "screen -dmS Nomad_agent nomad agent -config=/etc/nomad.d/client/config.hcl"
+
+
+
+- name: Starting Nomad agents on all hosts
+  hosts: servers:clients
   tasks:
-  - name: Starting nomad server agents
-    shell: "screen -dmS Nomad_agent nomad agent -config=/etc/nomad.d/server/config.hcl"
-- name: Starting all Nomad client agents
-  hosts: clients
-  tasks:
-  - name: Starting nomad client agents
-    shell: "screen -dmS Nomad_agent nomad agent -config=/etc/nomad.d/client/config.hcl"
+  - name: Enabling and starting Nomad service
+    ansible.builtin.systemd:
+      name: nomad
+      enabled: yes
+      masked: no
+      state: started

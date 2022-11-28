@@ -11,12 +11,17 @@
     template:
       dest: /etc/consul.d/server/config.hcl
       src: templates/server_config.hcl.j2
-  - name: Grab server configs
-    command: cat /etc/consul.d/server/config.hcl
-    register: command_output
-  - name: Print server configs
-    debug:
-      msg: "{{command_output.stdout_lines}}"
+  # - name: Grab server configs
+  #   command: cat /etc/consul.d/server/config.hcl
+  #   register: command_output
+  # - name: Print server configs
+  #   debug:
+  #     msg: "{{command_output.stdout_lines}}"
+  
+  - name: Create Consul server systemd service 
+    template:
+      dest: /etc/systemd/system/consul.service
+      src: templates/consul.service.j2
 
 
 - name: Configuring Consul client nodes on all DCs
@@ -32,9 +37,18 @@
     template:
       dest: /etc/consul.d/client/config.hcl
       src: templates/client_config.hcl.j2
-  - name: Grab client configs
-    command: cat /etc/consul.d/client/config.hcl
-    register: command_output
-  - name: Print client configs
-    debug:
-      msg: "{{command_output.stdout_lines}}"
+  # - name: Grab client configs
+  #   command: cat /etc/consul.d/client/config.hcl
+  #   register: command_output
+  # - name: Print client configs
+  #   debug:
+  #     msg: "{{command_output.stdout_lines}}"
+
+
+- name: Create Consul service on all hosts
+  hosts: clients:servers
+  tasks:  
+  - name: Create Consul systemd service
+    template:
+      dest: /etc/systemd/system/consul.service
+      src: templates/consul.service.j2

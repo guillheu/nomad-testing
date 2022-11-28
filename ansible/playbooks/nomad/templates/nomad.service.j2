@@ -1,0 +1,14 @@
+[Unit]
+Description=Custom service for Hashicorp Consul
+After=consul.service
+StartLimitIntervalSec=5
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/env nomad agent -config=/etc/nomad.d/{% if 'servers' in group_names %}server{% else %}client{% endif %}/config.hcl"
+
+[Install]
+WantedBy=multi-user.target

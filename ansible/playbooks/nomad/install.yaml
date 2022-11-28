@@ -12,11 +12,11 @@
       name: iproute2
       state: present
     become: yes
-  - name: Installing screen
-    apt:
-      name: screen
-      state: present
-    become: yes
+  # - name: Installing screen
+  #   apt:
+  #     name: screen
+  #     state: present
+  #   become: yes
   - name: Installing wget
     apt:
       name: wget
