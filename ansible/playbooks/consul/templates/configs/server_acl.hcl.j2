@@ -9,8 +9,7 @@ acl = {
 
   tokens {
     agent = "{{(server_token_json.stdout | from_json)['SecretID']}}"
-
-    # replication
+    replication = "{{replication_secret_id}}"
   }
 {% endif %}
 

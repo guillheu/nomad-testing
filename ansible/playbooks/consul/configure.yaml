@@ -23,12 +23,6 @@
     template:
       dest: /etc/consul.d/server/policies/{{inventory_hostname}}_policy.hcl
       src: templates/policies/server_policy.hcl.j2
-  # - name: Grab server configs
-  #   command: cat /etc/consul.d/server/config.hcl
-  #   register: command_output
-  # - name: Print server configs
-  #   debug:
-  #     msg: "{{command_output.stdout_lines}}"
   
   - name: Create Consul server systemd service 
     template:
@@ -58,3 +52,10 @@
     template:
       dest: /etc/systemd/system/consul.service
       src: templates/consul.service.j2
+- name: Create replication policy file for dc2 and dc3 on dc1_server_1
+  hosts: dc1_server_1
+  tasks:
+  - name: Creating policy file
+    template:
+      dest: /etc/consul.d/server/policies/replication_policy.hcl
+      src: templates/policies/replication_policy.hcl.j2

@@ -9,8 +9,8 @@
 #   - name: Starting consul client agents
 #     shell: "screen -dmS Consul_agent consul agent -config-file /etc/consul.d/client/config.hcl"
 
-- name: Starting Consul agents on dc1 servers
-  hosts: servers:&dc1
+- name: Starting Consul agents on servers
+  hosts: servers
   tasks:
   - name: Enabling and starting Consul service
     ansible.builtin.systemd:
@@ -18,25 +18,30 @@
       enabled: yes
       masked: no
       state: started
-- name: Fetching Secret ID on one server
+- name: Bootstrapping ACLs and setting up initial global policies on dc1_server_1
   hosts: dc1_server_1
   tasks:
   - name: Bootstrapping Consul cluster ACL
     command: "consul acl bootstrap -format=json"
     register: bootstrap_json
-  - name: Display Consul DC SecretID
-    debug:
-      msg: "{{(bootstrap_json.stdout | from_json)['SecretID']}}"
+  - name: Creating Consul replication policy
+    command: "consul acl policy create -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -name replication -description \"Replication policy for non-primary-datacenter servers\" -rules @/etc/consul.d/server/policies/replication_policy.hcl"
+  - name: Creating replication token
+    command: "consul acl token create -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -description \"Replication token for non-primary-datacenter servers\" -policy-name replication -format=json"
+    register: replication_token_json
+  - name: Creating local file with replication token SecretID
+    local_action: copy content="{{(replication_token_json.stdout | from_json)['SecretID']}}" dest="./replication_secret_id"
   - name: Creating local file with bootstrap SecretID
     local_action: copy content="{{(bootstrap_json.stdout | from_json)['SecretID']}}" dest="./bootstrap_secret_id"
-- name: Configuring ACLs for all dc1 servers
-  hosts: servers:&dc1
+- name: Configuring ACLs for all servers
+  hosts: servers
   vars:
     bootstrap_secret_id: "{{ lookup('file', './bootstrap_secret_id').splitlines()[0] }}"
+    replication_secret_id: "{{ lookup('file', './replication_secret_id').splitlines()[0] }}"
   tasks:
-  - name: Creating dc1 server policy
+  - name: Creating server policy
     command: "consul acl policy create -token {{bootstrap_secret_id}} -name {{inventory_hostname}}_policy -datacenter dc1 -description \"Agent policy for {{inventory_hostname}}\" -rules @/etc/consul.d/server/policies/{{inventory_hostname}}_policy.hcl"
-  - name: Creating dc1 server token
+  - name: Creating server token
     command: "consul acl token create -token {{bootstrap_secret_id}} -description \"Agent token for {{inventory_hostname}}\" -policy-name {{inventory_hostname}}_policy -format=json"
     register: server_token_json
   - name: Creating ACL server config files
