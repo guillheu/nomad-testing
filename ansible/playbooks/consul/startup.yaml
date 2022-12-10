@@ -1,0 +1,52 @@
+- name: Starting Consul agents on servers
+  hosts: servers
+  tasks:
+  - name: Enabling and starting Consul service
+    ansible.builtin.systemd:
+      name: consul
+      enabled: yes
+      masked: no
+      state: started
+- name: Bootstrapping ACLs and setting up initial global policies on dc1_server_1
+  hosts: dc1_server_1
+  tasks:
+  - name: Pause for 30 seconds
+    pause:
+      seconds: 5
+  - name: Bootstrapping Consul cluster ACL
+    command: "consul acl bootstrap -format=json"
+    register: bootstrap_json
+  - name: Creating local file with bootstrap SecretID
+    local_action: copy content="{{(bootstrap_json.stdout | from_json)['SecretID']}}" dest="./bootstrap_secret_id"
+  - name: Creating Consul replication policy
+    command: "consul acl policy create -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -name replication-policy -description \"Replication policy for all servers\" -rules @/etc/consul.d/server/acl/policies/replication_policy.hcl"
+  - name: Creating Consul server policy
+    command: "consul acl policy create -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -name server-policy -description \"Agent policy for all Consul servers\" -rules @/etc/consul.d/server/acl/policies/server_policy.hcl"
+  - name: Creating Node Identity role
+    command: "curl --header \"X-Consul-Token: {{(bootstrap_json.stdout | from_json)['SecretID']}}\" --request PUT --data @/etc/consul.d/server/acl/roles/server_role.json http://127.0.0.1:8500/v1/acl/role"
+  - name: Creating Node Identity token
+    command: "consul acl token create  -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -description \"Node token generated from server-role with node identity\" -role-name=server-role"  
+  # - name: Creating server token
+  #   command: "consul acl token create -token {{bootstrap_secret_id}} -description \"Agent token for {{inventory_hostname}}\" -policy-name {{inventory_hostname}}_policy -format=json"
+  #   register: server_token_json
+  # - name: Creating replication token
+  #   command: "consul acl token create -token {{(bootstrap_json.stdout | from_json)['SecretID']}} -description \"Replication token for non-primary-datacenter servers\" -policy-name replication -format=json"
+  #   register: replication_token_json
+  # - name: Creating local file with replication token SecretID
+  #   local_action: copy content="{{(replication_token_json.stdout | from_json)['SecretID']}}" dest="./replication_secret_id"
+- name: Configuring ACLs for all servers
+  hosts: servers
+  vars:
+    bootstrap_secret_id: "{{ lookup('file', './bootstrap_secret_id').splitlines()[0] }}"
+    replication_secret_id: "{{ lookup('file', './replication_secret_id').splitlines()[0] }}"
+  tasks:
+  - name: Creating ACL server config files
+    template:
+      dest: /etc/consul.d/server/config/acl.hcl
+      src: templates/configs/server_acl.hcl.j2
+  - name: Restarting the Consul service
+    ansible.builtin.systemd:
+      name: consul
+      masked: no
+      state: restarted
+      enabled: yes

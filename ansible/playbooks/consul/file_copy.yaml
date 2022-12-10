@@ -5,29 +5,38 @@
   tasks:
   - name: Create consul config folder
     file:
-      path: /etc/consul.d/server/
+      path: /etc/consul.d/server/config/
       state: directory
   - name: Create consul policies folder
     file:
-      path: /etc/consul.d/server/policies/
+      path: /etc/consul.d/server/acl/policies/
+      state: directory
+  - name: Create consul roles folder
+    file:
+      path: /etc/consul.d/server/acl/roles/
       state: directory
   - name: Create server config files from template
     template:
-      dest: /etc/consul.d/server/config.hcl
+      dest: /etc/consul.d/server/config/config.hcl
       src: templates/configs/server_config.hcl.j2
   - name: Create server acl config file from template
     template:
-      dest: /etc/consul.d/server/acl.hcl
+      dest: /etc/consul.d/server/config/acl.hcl
       src: templates/configs/server_acl.hcl.j2
-  - name: Creating policy files for dc1 servers
+  - name: Creating policy files for servers
     template:
-      dest: /etc/consul.d/server/policies/{{inventory_hostname}}_policy.hcl
-      src: templates/policies/server_policy.hcl.j2
-  
+      dest: /etc/consul.d/server/acl/policies/server_policy.hcl
+      src: templates/acl/policies/server_policy.hcl.j2
   - name: Create Consul server systemd service 
     template:
       dest: /etc/systemd/system/consul.service
       src: templates/consul.service.j2
+  - name: Create Consul server node identity role file 
+    template:
+      dest: /etc/consul.d/server/acl/roles/server_role.json
+      src: templates/acl/roles/server_role.json.j2
+
+
 
 
 - name: Configuring Consul client nodes on all DCs
@@ -57,5 +66,5 @@
   tasks:
   - name: Creating policy file
     template:
-      dest: /etc/consul.d/server/policies/replication_policy.hcl
-      src: templates/policies/replication_policy.hcl.j2
+      dest: /etc/consul.d/server/acl/policies/replication_policy.hcl
+      src: templates/acl/policies/replication_policy.hcl.j2

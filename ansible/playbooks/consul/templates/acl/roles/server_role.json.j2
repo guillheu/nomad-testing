@@ -1,0 +1,23 @@
+{
+  "Name": "server-role",
+  "Description": "Role for all servers accross the cluster",
+  "Policies": [
+    {
+      "Name": "server-policy"
+    },
+    {
+      "Name": "replication-policy"
+    }
+  ],
+  "NodeIdentities": 
+
+  {% set node_identities = [] %}
+  {% for datacenter in datacenters %}
+    {% for server in groups[datacenter] %}
+      {% set node_identities = node_identities.append({"NodeName":server, "Datacenter":datacenter}) %}
+    {% endfor %}
+  {% endfor %}
+
+  {{ node_identities | tojson }}
+
+}
