@@ -1,0 +1,10 @@
+- hosts: servers
+  
+  tasks:
+  - name: Display contents of /etc/consul.d/server/config/config.hcl
+    command: cat /etc/consul.d/server/config/acl.hcl
+    register: file_contents
+    
+  - name: Debug file contents
+    debug:
+      msg: "{{ file_contents.stdout_lines }}"
